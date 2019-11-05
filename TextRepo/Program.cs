@@ -10,9 +10,16 @@ namespace TextRepo
     {
         static void Main(string[] args)
         {
+            string text = readText();
+            CheckWordOccurence(text);
+        }
+
+        public static string readText()
+        {
             //Parse new lines into spaces
             string text;
             StringBuilder sb = new StringBuilder();
+            //Change file PATH*********************************************************************************************************
             foreach (string line in File.ReadLines(@"C:\Users\jarek.magulski\source\repos\TextRepo\TextRepo\tekst.txt", Encoding.UTF8))
             {
                 sb.Append(line + " ");
@@ -21,7 +28,11 @@ namespace TextRepo
 
             //Remove special characters including dots and commas, but not spaces.
             text = Helper.RemoveSpecialCharacters(text);
+            return text;
+        }
 
+        public static void CheckWordOccurence(string text)
+        {
             Dictionary<string, int> wordCount = new Dictionary<string, int>();
             List<string> words = new List<string>();
             words = text.Split(" ").ToList();
@@ -47,6 +58,11 @@ namespace TextRepo
 
             Console.WriteLine("\nDone!");
             Console.ReadLine();
+        }
+
+        public static void FindRhyme(string text)
+        {
+            //To Be Continued
         }
     }
     static class Helper
