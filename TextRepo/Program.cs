@@ -19,7 +19,7 @@ namespace TextRepo
             //Parse new lines into spaces
             string text;
             StringBuilder sb = new StringBuilder();
-            string filename = "tekst.txt";
+            string filename = Globals.fileToProcess + ".txt";
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             foreach (string line in File.ReadLines(fullPath, Encoding.UTF8))
             {
@@ -71,7 +71,7 @@ namespace TextRepo
             Console.WriteLine("\nDone!");
             Console.ReadLine();
             //Save list with words including wordcount in a file
-            string filename = "word count.txt";
+            string filename = Globals.fileToProcess + " word count.txt";
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             File.WriteAllLines(fullPath, wordListWithCount);
         }
@@ -106,8 +106,10 @@ namespace TextRepo
     {
         //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
         //COAS LAPTOP DESTINATION:
-        public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
+        //public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
         //MY LAPTOP DESTINATION:
-        //string locationOnDisc = "locationString";
+        public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
+        //Name of the text file that will get processed (for separation of albums / artists etc)
+        public static string fileToProcess = "guziorEvilThings";
     }
 }
