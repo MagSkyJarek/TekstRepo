@@ -19,8 +19,9 @@ namespace TextRepo
             //Parse new lines into spaces
             string text;
             StringBuilder sb = new StringBuilder();
-            //Change file PATH*********************************************************************************************************
-            foreach (string line in File.ReadLines(@"C:\Users\jarek.magulski\source\repos\TextRepo\TextRepo\tekst.txt", Encoding.UTF8))
+            string filename = "tekst.txt";
+            string fullPath = Path.Combine(Globals.locationOnDisc, filename);
+            foreach (string line in File.ReadLines(fullPath, Encoding.UTF8))
             {
                 sb.Append(line + " ");
             }
@@ -49,15 +50,30 @@ namespace TextRepo
             }
             //Remove the unintentional empty string from counted words
             wordCount.Remove("");
+            List<string> wordListWithCount = new List<string>();
 
-            //Print every word with it's count
+            //Print every word with it's count in console
             foreach (var word in wordCount)
             {
                 Console.WriteLine(word.Key + ": " + word.Value);
+                
             }
+            //Convert the dictionary to a sorted list
+            var myList = wordCount.ToList();
+            myList.Sort((pair1, pair2) => pair1.Value.CompareTo(pair2.Value));
+            foreach (var word in myList)
+            {
+                wordListWithCount.Add(word.Key + " : " + word.Value);
+            }
+            wordListWithCount.Reverse();
 
+            //Finished
             Console.WriteLine("\nDone!");
             Console.ReadLine();
+            //Save list with words including wordcount in a file
+            string filename = "word count.txt";
+            string fullPath = Path.Combine(Globals.locationOnDisc, filename);
+            File.WriteAllLines(fullPath, wordListWithCount);
         }
 
         public static void FindRhyme(string text)
@@ -85,5 +101,13 @@ namespace TextRepo
             string result = sb.ToString().ToLower().Replace("\t", " ");
             return result;
         }
+    }
+    public static class Globals
+    {
+        //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
+        //COAS LAPTOP DESTINATION:
+        public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
+        //MY LAPTOP DESTINATION:
+        //string locationOnDisc = "locationString";
     }
 }
