@@ -80,8 +80,19 @@ namespace TextRepo
                     {
                         if (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter))
                         {
-                            onlyRhymes.Add(word);
-                            Console.WriteLine(word);
+                            bool mayAdd = true;
+                            foreach (var item in charArray)
+                            {
+                                if (reversed.Contains(item) && reversed.IndexOf(item) < reversed.IndexOf(secondLetter))
+                                {
+                                    mayAdd = false;
+                                }
+                            }
+                            if (mayAdd)
+                            {
+                                onlyRhymes.Add(word);
+                                Console.WriteLine(word);
+                            }
                         }
                     }
                 }
