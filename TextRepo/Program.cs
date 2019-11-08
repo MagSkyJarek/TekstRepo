@@ -8,10 +8,22 @@ namespace TextRepo
 {
     class Program
     {
+        public static class Globals
+        {
+            //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
+            //COAS LAPTOP DESTINATION:
+            //public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
+            //MY LAPTOP DESTINATION:
+            public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
+            //Name of the text file that will get processed (for separation of albums / artists etc)
+            public static string fileToProcess = "guziorEvilThings";
+        }
+
         static void Main(string[] args)
         {
             string text = readText();
-            CheckWordOccurence(text);
+            SaveRhymes(text, "a", "e");
+            SaveWordOccurence(text);
         }
 
         public static string readText()
@@ -32,7 +44,68 @@ namespace TextRepo
             return text;
         }
 
-        public static void CheckWordOccurence(string text)
+        public static void SaveRhymes(string text, string firstLetter, string secondLetter)
+        {
+            List<string> rhymeList = FindRhymes(text, firstLetter, secondLetter);
+
+            //Save list with words including wordcount in a file
+            string filename = Globals.fileToProcess + " rhymes with " + firstLetter + " " + secondLetter + ".txt";
+            string fullPath = Path.Combine(Globals.locationOnDisc, filename);
+            Console.ReadKey();
+            File.WriteAllLines(fullPath, rhymeList);
+        }
+
+        public static List<string> FindRhymes(string text, string firstLetter, string secondLetter)
+        {
+            //Get Dictionary of words and counts, so no double words will occur
+            Dictionary<string, int> wordCount = CheckWordOccurence(text);
+            List<string> allWords = new List<string>();
+            List<string> onlyRhymes = new List<string>();
+            string letters = RemoveFirstAndSecondLetter(firstLetter, secondLetter);
+            char[] charArray = letters.ToCharArray();
+
+            //Make new list with just the words. No counts.
+            foreach (var word in wordCount)
+            {
+                allWords.Add(word.Key);
+            }
+
+            //For each word in the List, check if it rhymes
+            foreach (var word in allWords)
+            {
+                string reversed = ReverseWord(word);
+                if (reversed.Contains(secondLetter))
+                {
+                    if (reversed.Contains(firstLetter))
+                    {
+                        if (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter))
+                        {
+                            onlyRhymes.Add(word);
+                            Console.WriteLine(word);
+                        }
+                    }
+                }
+            }
+            return onlyRhymes;
+        }
+
+        public static string RemoveFirstAndSecondLetter(string firstLetter, string secondLetter)
+        {
+            string allForbidden = "aeiouy";
+            char[] charArray = allForbidden.ToCharArray();
+            allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
+            allForbidden = allForbidden.Remove(allForbidden.IndexOf(secondLetter), 1);
+            return allForbidden;
+        }
+
+        public static string ReverseWord(string word)
+        {
+            char[] charArray = word.ToCharArray();
+            Array.Reverse(charArray);
+            return new string(charArray);
+        }
+
+        public static Dictionary<string, int> CheckWordOccurence(string text)
         {
             Dictionary<string, int> wordCount = new Dictionary<string, int>();
             List<string> words = new List<string>();
@@ -50,13 +123,21 @@ namespace TextRepo
             }
             //Remove the unintentional empty string from counted words
             wordCount.Remove("");
+
+            return wordCount;
+        }
+
+        public static void SaveWordOccurence(string text)
+        {
+            //Fill the list with the words and occ
+            Dictionary<string, int> wordCount = CheckWordOccurence(text);
             List<string> wordListWithCount = new List<string>();
 
             //Print every word with it's count in console
             foreach (var word in wordCount)
             {
                 Console.WriteLine(word.Key + ": " + word.Value);
-                
+
             }
             //Convert the dictionary to a sorted list
             var myList = wordCount.ToList();
@@ -74,11 +155,6 @@ namespace TextRepo
             string filename = Globals.fileToProcess + " word count.txt";
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             File.WriteAllLines(fullPath, wordListWithCount);
-        }
-
-        public static void FindRhyme(string text)
-        {
-            //To Be Continued
         }
     }
     static class Helper
@@ -101,15 +177,5 @@ namespace TextRepo
             string result = sb.ToString().ToLower().Replace("\t", " ");
             return result;
         }
-    }
-    public static class Globals
-    {
-        //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
-        //COAS LAPTOP DESTINATION:
-        //public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
-        //MY LAPTOP DESTINATION:
-        public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
-        //Name of the text file that will get processed (for separation of albums / artists etc)
-        public static string fileToProcess = "guziorEvilThings";
     }
 }
