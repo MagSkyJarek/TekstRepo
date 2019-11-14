@@ -12,18 +12,18 @@ namespace TextRepo
         {
             //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
             //COAS LAPTOP DESTINATION:
-            //public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
+            public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
             //MY LAPTOP DESTINATION:
-            public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
+            //public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
             //Name of the text file that will get processed (for separation of albums / artists etc)
-            public static string fileToProcess = "guziorEvilThings";
+            public static string fileToProcess = "tekst";
         }
 
         static void Main(string[] args)
         {
             string text = readText();
-            SaveRhymes(text, "a", "e");
-            SaveWordOccurence(text);
+            SaveRhymes(text, "o", "e");
+            //SaveWordOccurence(text);
         }
 
         public static string readText()
@@ -80,12 +80,12 @@ namespace TextRepo
                     {
                         if (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter))
                         {
-                            bool mayAdd = true;
-                            foreach (var item in charArray)
+                            bool mayAdd = ValidateForLetterI(firstLetter, secondLetter, reversed);
+                            if (mayAdd)
                             {
-                                if (reversed.Contains(item) && reversed.IndexOf(item) < reversed.IndexOf(secondLetter))
+                                foreach (var item in charArray)
                                 {
-                                    mayAdd = false;
+                                    mayAdd = ValidateCharIndex(item, reversed, firstLetter);
                                 }
                             }
                             if (mayAdd)
@@ -100,9 +100,36 @@ namespace TextRepo
             return onlyRhymes;
         }
 
+        public static bool ValidateForLetterI(string firstLetter, string secondLetter, string reversed)
+        {
+            bool mayAdd = true;
+            if (reversed.Contains('i'))
+            {
+                if ((reversed.IndexOf('i') - 1) == reversed.IndexOf(firstLetter) || (reversed.IndexOf('i') - 1) == reversed.IndexOf(secondLetter))
+                {
+                    mayAdd = true;
+                }
+                else { mayAdd = false; }
+            }
+            return mayAdd;
+        }
+
+        public static bool ValidateCharIndex(char letter, string reversed, string firstLetter)
+        {
+            bool mayAdd = true;
+            if (reversed.Contains(letter))
+            {
+                if (reversed.IndexOf(letter) < reversed.IndexOf(firstLetter))
+                {
+                    mayAdd = false;
+                }
+            }
+            return mayAdd;
+        }
+
         public static string RemoveFirstAndSecondLetter(string firstLetter, string secondLetter)
         {
-            string allForbidden = "aeiouy";
+            string allForbidden = "aeouy";
             char[] charArray = allForbidden.ToCharArray();
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(secondLetter), 1);
