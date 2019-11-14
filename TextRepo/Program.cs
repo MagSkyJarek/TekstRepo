@@ -74,26 +74,20 @@ namespace TextRepo
             foreach (var word in allWords)
             {
                 string reversed = ReverseWord(word);
-                if (reversed.Contains(secondLetter))
+                if (reversed.Contains(secondLetter) && reversed.Contains(firstLetter) && (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter)))
                 {
-                    if (reversed.Contains(firstLetter))
+                    bool mayAdd = ValidateForLetterI(firstLetter, secondLetter, reversed);
+                    if (mayAdd)
                     {
-                        if (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter))
+                        foreach (var item in charArray)
                         {
-                            bool mayAdd = ValidateForLetterI(firstLetter, secondLetter, reversed);
-                            if (mayAdd)
-                            {
-                                foreach (var item in charArray)
-                                {
-                                    mayAdd = ValidateCharIndex(item, reversed, firstLetter);
-                                }
-                            }
-                            if (mayAdd)
-                            {
-                                onlyRhymes.Add(word);
-                                Console.WriteLine(word);
-                            }
+                            mayAdd = ValidateCharIndex(item, reversed, firstLetter);
                         }
+                    }
+                    if (mayAdd)
+                    {
+                        onlyRhymes.Add(word);
+                        Console.WriteLine(word);
                     }
                 }
             }
