@@ -22,7 +22,7 @@ namespace TextRepo
         static void Main(string[] args)
         {
             string text = readText();
-            SaveRhymes(text, "o", "e");
+            SaveRhymes(text, "a", "e");
             //SaveWordOccurence(text);
         }
 
@@ -54,7 +54,7 @@ namespace TextRepo
             Console.ReadKey();
             File.WriteAllLines(fullPath, rhymeList);
         }
-
+        
         public static List<string> FindRhymes(string text, string firstLetter, string secondLetter)
         {
             //Get Dictionary of words and counts, so no double words will occur
@@ -82,6 +82,10 @@ namespace TextRepo
                         foreach (var item in charArray)
                         {
                             mayAdd = ValidateCharIndex(item, reversed, firstLetter);
+                            if (mayAdd == false)
+                            {
+                                break;
+                            }
                         }
                     }
                     if (mayAdd)
@@ -103,7 +107,10 @@ namespace TextRepo
                 {
                     mayAdd = true;
                 }
-                else { mayAdd = false; }
+                else 
+                {
+                    mayAdd = false;
+                }
             }
             return mayAdd;
         }
