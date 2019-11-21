@@ -22,7 +22,7 @@ namespace TextRepo
         static void Main(string[] args)
         {
             string text = readText();
-            SaveRhymes(text, "a", "e");
+            SaveRhymes(text, "e", "e");
             //SaveWordOccurence(text);
         }
 
@@ -61,8 +61,6 @@ namespace TextRepo
             Dictionary<string, int> wordCount = CheckWordOccurence(text);
             List<string> allWords = new List<string>();
             List<string> onlyRhymes = new List<string>();
-            string letters = RemoveFirstAndSecondLetter(firstLetter, secondLetter);
-            char[] charArray = letters.ToCharArray();
 
             //Make new list with just the words. No counts.
             foreach (var word in wordCount)
@@ -73,29 +71,88 @@ namespace TextRepo
             //For each word in the List, check if it rhymes
             foreach (var word in allWords)
             {
-                string reversed = ReverseWord(word);
-                if (reversed.Contains(secondLetter) && reversed.Contains(firstLetter) && (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter)))
+                bool sameTwoLetters = secondLetter == firstLetter;
+                bool mayAdd;
+                if (sameTwoLetters)
                 {
-                    bool mayAdd = ValidateForLetterI(firstLetter, secondLetter, reversed);
-                    if (mayAdd)
-                    {
-                        foreach (var item in charArray)
-                        {
-                            mayAdd = ValidateCharIndex(item, reversed, firstLetter);
-                            if (mayAdd == false)
-                            {
-                                break;
-                            }
-                        }
-                    }
-                    if (mayAdd)
-                    {
-                        onlyRhymes.Add(word);
-                        Console.WriteLine(word);
-                    }
+                    mayAdd = CheckIfWordRhymesSameTwoLetters(word, firstLetter);
+                }
+                else
+                {
+                    mayAdd = CheckIfWordRhymes(word, secondLetter, firstLetter);
+                }
+                if (mayAdd)
+                {
+                    onlyRhymes.Add(word);
+                    Console.WriteLine(word);
                 }
             }
             return onlyRhymes;
+        }
+
+        public static bool CheckIfWordRhymesSameTwoLetters(string word, string letter)
+        {
+            bool mayAdd = false;
+            string letters = RemoveFirstAndSecondLetter(letter);
+            char[] charArray = letters.ToCharArray();
+            string reversed = ReverseWord(word);
+            int smallestUnwantedIndex = reversed.Length - 1; ;
+            bool IValidation = ValidateForLetterI(letter, letter, reversed);
+            foreach (var item in charArray)
+            {
+                reversed = ReverseWord(word);
+                if (reversed.Contains(item))
+                {
+                    int index = reversed.IndexOf(item);
+                    if (index < smallestUnwantedIndex)
+                    {
+                        smallestUnwantedIndex = index;
+                    }
+                }
+            }
+            Console.WriteLine("Word: {2}, smallest unwanted Index: {0}. Letter corresponding with this index: {1}", smallestUnwantedIndex, reversed.ElementAt(smallestUnwantedIndex), reversed);
+            if (reversed.Contains(letter))
+            {
+                Console.WriteLine("reversed contains the letter {0}", letter);
+                int desiredLetterIndexOne = reversed.IndexOf(letter);
+                reversed = reversed.Remove(desiredLetterIndexOne, 1);
+            }
+            else { return false; }
+            if (reversed.Contains(letter))
+            {
+                Console.WriteLine("reversed contains the letter {0}", letter);
+                int desiredLetterIndexTwo = reversed.IndexOf(letter) + 1;
+                Console.WriteLine("desiredLetterIndexTwo: {0}, smallestUnwantedIndex: {1}, IValidation: {2}", desiredLetterIndexTwo, smallestUnwantedIndex, IValidation.ToString());
+                if ((desiredLetterIndexTwo < smallestUnwantedIndex) && IValidation)
+                {
+                    mayAdd = true;
+                }
+            }
+            else { return false; }
+            return mayAdd;
+        }
+        public static bool CheckIfWordRhymes(string word, string secondLetter, string firstLetter)
+        {
+            bool mayAdd = true;
+            string letters = RemoveFirstAndSecondLetter(firstLetter, secondLetter);
+            char[] charArray = letters.ToCharArray();
+            string reversed = ReverseWord(word);
+            if (reversed.Contains(secondLetter) && reversed.Contains(firstLetter) && (reversed.IndexOf(secondLetter) < reversed.IndexOf(firstLetter)))
+            {
+                mayAdd = ValidateForLetterI(firstLetter, secondLetter, reversed);
+                if (mayAdd)
+                {
+                    foreach (var item in charArray)
+                    {
+                        mayAdd = ValidateCharIndex(item, reversed, firstLetter);
+                        if (mayAdd == false)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }else { mayAdd = false; }
+            return mayAdd;
         }
 
         public static bool ValidateForLetterI(string firstLetter, string secondLetter, string reversed)
@@ -134,6 +191,14 @@ namespace TextRepo
             char[] charArray = allForbidden.ToCharArray();
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(secondLetter), 1);
+            return allForbidden;
+        }
+
+        public static string RemoveFirstAndSecondLetter(string firstLetter)
+        {
+            string allForbidden = "aeouy";
+            char[] charArray = allForbidden.ToCharArray();
+            allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
             return allForbidden;
         }
 
