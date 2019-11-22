@@ -22,7 +22,7 @@ namespace TextRepo
         static void Main(string[] args)
         {
             string text = readText();
-            SaveRhymes(text, "e", "e");
+            SaveRhymes(text, "a", "e");
             //SaveWordOccurence(text);
         }
 
@@ -110,19 +110,19 @@ namespace TextRepo
                     }
                 }
             }
-            Console.WriteLine("Word: {2}, smallest unwanted Index: {0}. Letter corresponding with this index: {1}", smallestUnwantedIndex, reversed.ElementAt(smallestUnwantedIndex), reversed);
+            //Console.WriteLine("Word: {2}, smallest unwanted Index: {0}. Letter corresponding with this index: {1}", smallestUnwantedIndex, reversed.ElementAt(smallestUnwantedIndex), reversed);
             if (reversed.Contains(letter))
             {
-                Console.WriteLine("reversed contains the letter {0}", letter);
+                //Console.WriteLine("reversed contains the letter {0}", letter);
                 int desiredLetterIndexOne = reversed.IndexOf(letter);
                 reversed = reversed.Remove(desiredLetterIndexOne, 1);
             }
             else { return false; }
             if (reversed.Contains(letter))
             {
-                Console.WriteLine("reversed contains the letter {0}", letter);
+                //Console.WriteLine("reversed contains the letter {0}", letter);
                 int desiredLetterIndexTwo = reversed.IndexOf(letter) + 1;
-                Console.WriteLine("desiredLetterIndexTwo: {0}, smallestUnwantedIndex: {1}, IValidation: {2}", desiredLetterIndexTwo, smallestUnwantedIndex, IValidation.ToString());
+                //Console.WriteLine("desiredLetterIndexTwo: {0}, smallestUnwantedIndex: {1}, IValidation: {2}", desiredLetterIndexTwo, smallestUnwantedIndex, IValidation.ToString());
                 if ((desiredLetterIndexTwo < smallestUnwantedIndex) && IValidation)
                 {
                     mayAdd = true;
