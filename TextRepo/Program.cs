@@ -11,27 +11,30 @@ namespace TextRepo
         public static class Globals
         {
             //CHANGE DESTINATION LOCATION ON DISC**************************************************************************************
-            //COAS LAPTOP DESTINATION:
-            public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";
-            //MY LAPTOP DESTINATION:
-            //public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";
+            public static string locationOnDisc = @"C:\Users\jarek.magulski\source\repos\TekstRepo\TextRepo";//COAS
+            //public static string locationOnDisc = @"C:\Users\jarek\source\repos\TekstRepo\TextRepo";//HOME
+
             //Name of the text file that will get processed (for separation of albums / artists etc)
             public static string fileToProcess = "tekst";
         }
 
         static void Main(string[] args)
         {
-            string text = readText();
-            SaveRhymes(text, "a", "e");
-            //SaveWordOccurence(text);
+            string fromFile = "";
+            string toFile = "";
+            MergeFiles(fromFile, toFile);
+
+            //string text = readText(Globals.fileToProcess);
+            //SaveRhymes(text, "a", "e");
+            //SaveWordOccurence(text, Globals.fileToProcess);
         }
 
-        public static string readText()
+        public static string readText(string inputFileName)
         {
             //Parse new lines into spaces
             string text;
             StringBuilder sb = new StringBuilder();
-            string filename = Globals.fileToProcess + ".txt";
+            string filename =  inputFileName + ".txt";
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             foreach (string line in File.ReadLines(fullPath, Encoding.UTF8))
             {
@@ -42,6 +45,13 @@ namespace TextRepo
             //Remove special characters including dots and commas, but not spaces.
             text = Helper.RemoveSpecialCharacters(text);
             return text;
+        }
+
+        public static void MergeFiles(string mergeFromFile, string mergeToFile)
+        {
+            string AggregatedFile = readText(mergeFromFile) + " " + readText(mergeToFile);
+
+            SaveWordOccurence(AggregatedFile, mergeToFile);
         }
 
         public static void SaveRhymes(string text, string firstLetter, string secondLetter)
@@ -231,7 +241,7 @@ namespace TextRepo
             return wordCount;
         }
 
-        public static void SaveWordOccurence(string text)
+        public static void SaveWordOccurence(string text, string outputFile)
         {
             //Fill the list with the words and occ
             Dictionary<string, int> wordCount = CheckWordOccurence(text);
@@ -256,7 +266,7 @@ namespace TextRepo
             Console.WriteLine("\nDone!");
             Console.ReadLine();
             //Save list with words including wordcount in a file
-            string filename = Globals.fileToProcess + " word count.txt";
+            string filename = outputFile + " word count.txt";
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             File.WriteAllLines(fullPath, wordListWithCount);
         }
