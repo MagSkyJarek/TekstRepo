@@ -20,12 +20,12 @@ namespace TextRepo
 
         static void Main(string[] args)
         {
-            string fromFile = "";
-            string toFile = "";
-            MergeFiles(fromFile, toFile);
+            //string fromFile = "";
+            //string toFile = "";
+            //MergeFiles(fromFile, toFile);
 
-            //string text = readText(Globals.fileToProcess);
-            //SaveRhymes(text, "a", "e");
+            string text = readText(Globals.fileToProcess);
+            SaveRhymes(text, "u", "e");
             //SaveWordOccurence(text, Globals.fileToProcess);
         }
 
@@ -56,7 +56,118 @@ namespace TextRepo
 
         public static void SaveRhymes(string text, string firstLetter, string secondLetter)
         {
-            List<string> rhymeList = FindRhymes(text, firstLetter, secondLetter);
+            List<string> rhymeList;
+
+            if (firstLetter == "e" && secondLetter == "e")//First letter E
+            {
+                List<string> list1 = FindRhymes(text, "e", "e");
+                List<string> list2 = FindRhymes(text, "ę", "e");
+                List<string> list3 = FindRhymes(text, "e", "ę");
+                List<string> list4 = FindRhymes(text, "ę", "ę");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }else if (firstLetter == "e" && secondLetter == "u")
+            {
+                List<string> list1 = FindRhymes(text, "e", "u");
+                List<string> list2 = FindRhymes(text, "ę", "u");
+                List<string> list3 = FindRhymes(text, "e", "ó");
+                List<string> list4 = FindRhymes(text, "ę", "ó");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "e" && secondLetter == "o")
+            {
+                List<string> list1 = FindRhymes(text, "e", "o");
+                List<string> list2 = FindRhymes(text, "ę", "o");
+                List<string> list3 = FindRhymes(text, "e", "ą");
+                List<string> list4 = FindRhymes(text, "ę", "ą");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "e")
+            {
+                List<string> list1 = FindRhymes(text, "e", secondLetter);
+                List<string> list2 = FindRhymes(text, "ę", secondLetter);
+                rhymeList = list1.Concat(list2).ToList();//End e
+            }else if (firstLetter == "u" && secondLetter == "u") //First letter u
+            {
+                List<string> list1 = FindRhymes(text, "u", "u");
+                List<string> list2 = FindRhymes(text, "ó", "u");
+                List<string> list3 = FindRhymes(text, "u", "ó");
+                List<string> list4 = FindRhymes(text, "ó", "ó");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "u" && secondLetter == "e")
+            {
+                List<string> list1 = FindRhymes(text, "u", "e");
+                List<string> list2 = FindRhymes(text, "ó", "e");
+                List<string> list3 = FindRhymes(text, "u", "ę");
+                List<string> list4 = FindRhymes(text, "ó", "ę");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "u" && secondLetter == "o")
+            {
+                List<string> list1 = FindRhymes(text, "u", "o");
+                List<string> list2 = FindRhymes(text, "ó", "o");
+                List<string> list3 = FindRhymes(text, "u", "ą");
+                List<string> list4 = FindRhymes(text, "ó", "ą");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "u")
+            {
+                List<string> list1 = FindRhymes(text, "u", secondLetter);
+                List<string> list2 = FindRhymes(text, "ó", secondLetter);
+                rhymeList = list1.Concat(list2).ToList();//End u
+            }
+            else if (firstLetter == "o" && secondLetter == "u") //First letter o
+            {
+                List<string> list1 = FindRhymes(text, "o", "u");
+                List<string> list2 = FindRhymes(text, "ą", "u");
+                List<string> list3 = FindRhymes(text, "o", "ó");
+                List<string> list4 = FindRhymes(text, "ą", "ó");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "o" && secondLetter == "e")
+            {
+                List<string> list1 = FindRhymes(text, "o", "e");
+                List<string> list2 = FindRhymes(text, "ą", "e");
+                List<string> list3 = FindRhymes(text, "o", "ę");
+                List<string> list4 = FindRhymes(text, "ą", "ę");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "o" && secondLetter == "o")
+            {
+                List<string> list1 = FindRhymes(text, "o", "o");
+                List<string> list2 = FindRhymes(text, "ą", "o");
+                List<string> list3 = FindRhymes(text, "o", "ą");
+                List<string> list4 = FindRhymes(text, "ą", "ą");
+                rhymeList = list1.Concat(list2).Concat(list3).Concat(list4).ToList();
+            }
+            else if (firstLetter == "o")
+            {
+                List<string> list1 = FindRhymes(text, "o", secondLetter);
+                List<string> list2 = FindRhymes(text, "ą", secondLetter);
+                rhymeList = list1.Concat(list2).ToList();//End o
+            }
+            else if (secondLetter == "o")//Secondletter o
+            {
+                List<string> list1 = FindRhymes(text, firstLetter, "o");
+                List<string> list2 = FindRhymes(text, firstLetter, "ą");
+                rhymeList = list1.Concat(list2).ToList();//End o
+            }
+            else if (secondLetter == "u")//Secondletter u
+            {
+                List<string> list1 = FindRhymes(text, firstLetter, "u");
+                List<string> list2 = FindRhymes(text, firstLetter, "ó");
+                rhymeList = list1.Concat(list2).ToList();//End u
+            }
+            else if (secondLetter == "e")//Secondletter e
+            {
+                List<string> list1 = FindRhymes(text, firstLetter, "e");
+                List<string> list2 = FindRhymes(text, firstLetter, "ę");
+                rhymeList = list1.Concat(list2).ToList();//End e
+            }
+            else
+            {
+                rhymeList = FindRhymes(text, firstLetter, secondLetter);
+            }
 
             //Save list with words including wordcount in a file
             string filename = Globals.fileToProcess + " rhymes with " + firstLetter + " " + secondLetter + ".txt";
@@ -197,7 +308,7 @@ namespace TextRepo
 
         public static string RemoveFirstAndSecondLetter(string firstLetter, string secondLetter)
         {
-            string allForbidden = "aeouy";
+            string allForbidden = "aąeęoóuy";
             char[] charArray = allForbidden.ToCharArray();
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(secondLetter), 1);
@@ -206,7 +317,7 @@ namespace TextRepo
 
         public static string RemoveFirstAndSecondLetter(string firstLetter)
         {
-            string allForbidden = "aeouy";
+            string allForbidden = "aąeęoóuy";
             char[] charArray = allForbidden.ToCharArray();
             allForbidden = allForbidden.Remove(allForbidden.IndexOf(firstLetter), 1);
             return allForbidden;
