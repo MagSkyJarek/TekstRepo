@@ -20,12 +20,15 @@ namespace TextRepo
 
         static void Main(string[] args)
         {
+            string input = "ciebie";
+            RecCheckRhyme(input, "e", "e");
+            Console.ReadKey();
             //string fromFile = "";
             //string toFile = "";
             //MergeFiles(fromFile, toFile);
 
-            string text = readText(Globals.fileToProcess);
-            SaveRhymes(text, "u", "e");
+            //string text = readText(Globals.fileToProcess);
+            //SaveRhymes(text, "u", "e");
             //SaveWordOccurence(text, Globals.fileToProcess);
         }
 
@@ -381,6 +384,53 @@ namespace TextRepo
             string fullPath = Path.Combine(Globals.locationOnDisc, filename);
             File.WriteAllLines(fullPath, wordListWithCount);
         }
+
+        public static bool RecCheckRhyme(string word, string lastSyllable)
+        {
+            string reversedWord = ReverseWord(word);
+            string forbiddenLetters = "aąeęoóuyi";
+            int minIndex = -1;
+            char[] charArray = forbiddenLetters.ToCharArray();
+            foreach (var character in charArray)
+            {
+                if (reversedWord.Contains(character))
+                {
+                    int characterIndex = reversedWord.IndexOf(character);
+                    if (minIndex < 0 || characterIndex < minIndex)
+                    {
+                        minIndex = characterIndex;
+                    }
+                }
+            }
+            if (reversedWord[minIndex].ToString() == lastSyllable)
+            {
+                Console.WriteLine("Word rhymes!");
+                return true;
+            }else
+            {
+                Console.WriteLine("Word DOESNT rhyme!");
+                return false;
+            }
+        }
+
+        public static bool RecCheckRhyme(string word, string lastSyllable, string secondLastSyllable)
+        {
+            if (RecCheckRhyme(word, lastSyllable))
+            {
+                string reversedWord = ReverseWord(word);
+                int lastSyllableIndex = reversedWord.IndexOf(lastSyllable);
+                if (reversedWord[lastSyllableIndex + 1].ToString() == "i")
+                {
+                    lastSyllableIndex++;
+                }
+                string reversedChoppedOffWord = reversedWord.Remove(0, (lastSyllableIndex + 1));
+                string choppedOffWord = ReverseWord(reversedChoppedOffWord);
+                bool result = RecCheckRhyme(choppedOffWord, secondLastSyllable);
+                return result;
+            }
+            else { return false; }
+        }
+
     }
     static class Helper
     {
